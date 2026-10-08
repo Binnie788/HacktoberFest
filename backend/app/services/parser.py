@@ -27,11 +27,12 @@ Target shooting mode: {mode.upper()}
 On-device sensor telemetry: {context_str}
 
 Analyze the framing, subject placement, lighting, rule-of-thirds, and angle in this photo.
+Focus heavily on spatial adjustments: suggest stepping closer, stepping farther back, moving left/right, or repositioning the subject.
 CRITICAL CONSTRAINT: You MUST respond with ONLY a single, valid JSON object and NOTHING ELSE. No introductory text, no conversational remarks, no markdown fence.
 
 JSON SCHEMA:
 {{
-  "tip": "Short actionable instruction, strictly 12 words or fewer (e.g. 'Tilt down slightly and align subject on right third line')",
+  "tip": "Short actionable instruction, strictly 12 words or fewer (e.g. 'Step closer for detail', 'Move left to clear background', 'Center subject')",
   "movement": {{
     "dx": <float from -1.0 to 1.0; negative means pan left, positive means pan right, 0.0 means good>,
     "dy": <float from -1.0 to 1.0; negative means tilt up, positive means tilt down, 0.0 means good>

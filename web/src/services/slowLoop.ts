@@ -7,7 +7,7 @@ export class SlowLoopEngine {
   private lastRequestTime: number = 0;
   private minIntervalMs: number = import.meta.env.VITE_GEMMA_POLL_INTERVAL_MS 
     ? parseInt(import.meta.env.VITE_GEMMA_POLL_INTERVAL_MS, 10) 
-    : 1500; // Default to 1.5s for live feedback (configurable via .env)
+    : 2500; // Default to 2.5s for balanced feedback
   private requireStability: boolean = import.meta.env.VITE_REQUIRE_STABILITY === 'true';
 
   private lastSentMetrics: LocalMetrics | null = null;
