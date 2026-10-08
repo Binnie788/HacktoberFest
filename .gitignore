@@ -1,0 +1,62 @@
+# Environment variables & secrets
+.env
+*.env
+.env.*
+!.env.example
+
+# Node / Web dependencies & build
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing & logs
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor & OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+cloudflared.exe
+
+# Certificates and Keys
+*.pem
+*.key
+*.crt
+
+# Local DBs
+*.sqlite
+*.sqlite3
+*.db
