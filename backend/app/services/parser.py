@@ -26,13 +26,13 @@ def build_analysis_prompt(mode: str, metrics: Dict[str, Any]) -> str:
 Target shooting mode: {mode.upper()}
 On-device sensor telemetry: {context_str}
 
-Analyze the framing, subject placement, lighting, rule-of-thirds, and angle in this photo.
-Focus heavily on spatial adjustments: suggest stepping closer, stepping farther back, moving left/right, or repositioning the subject.
+Analyze the framing, subject placement, lighting, rule-of-thirds, and camera level (tilt angle) in this photo.
+If the camera tilt is high, explicitly tell the user to level the camera. If the subject is dead center, explicitly suggest using rule-of-thirds or a more dynamic framing method. Focus heavily on spatial adjustments: suggest stepping closer, stepping farther back, or moving left/right.
 CRITICAL CONSTRAINT: You MUST respond with ONLY a single, valid JSON object and NOTHING ELSE. No introductory text, no conversational remarks, no markdown fence.
 
 JSON SCHEMA:
 {{
-  "tip": "Short actionable instruction, strictly 12 words or fewer (e.g. 'Step closer for detail', 'Move left to clear background', 'Center subject')",
+  "tip": "Actionable instruction, strictly 25 words or fewer (e.g. 'Level the camera and move the subject to the right third for better balance. Step closer.')",
   "movement": {{
     "dx": <float from -1.0 to 1.0; negative means pan left, positive means pan right, 0.0 means good>,
     "dy": <float from -1.0 to 1.0; negative means tilt up, positive means tilt down, 0.0 means good>
@@ -91,10 +91,10 @@ def parse_gemma_json(raw_text: str) -> Dict[str, Any]:
 
     # Normalize fields
     raw_tip = str(data.get("tip", "Hold steady and balance the frame")).strip()
-    # Enforce 12-word limit strictly if model exceeded it
+    # Enforce 28-word limit strictly if model exceeded it
     words = raw_tip.split()
-    if len(words) > 14:
-        raw_tip = " ".join(words[:12]) + "..."
+    if len(words) > 30:
+        raw_tip = " ".join(words[:28]) + "..."
 
     movement_data = data.get("movement", {})
     try:

@@ -35,12 +35,12 @@ export const GuidanceBar: React.FC<GuidanceBarProps> = ({ state, onTap }) => {
     <div
       className="w-full max-w-lg px-4 py-3 mx-auto select-none transition-all duration-300"
     >
-      <div className="flex items-center justify-between gap-4 px-6 py-4 rounded-full bg-black/60 backdrop-blur-md border border-white/15 shadow-2xl">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className={`p-2 rounded-full border ${badgeColor} shrink-0`}>
+      <div className="flex items-start justify-between gap-4 px-6 py-4 rounded-3xl bg-black/60 backdrop-blur-md border border-white/15 shadow-2xl">
+        <div className="flex items-start gap-3 min-w-0">
+          <div className={`p-2 rounded-full border ${badgeColor} shrink-0 mt-0.5`}>
             <Icon className={`w-6 h-6 ${isAnalyzing ? 'animate-spin' : ''}`} />
           </div>
-          <p className="text-base sm:text-lg font-medium text-white/90 truncate tracking-wide">
+          <p className="text-base sm:text-lg font-medium text-white/90 leading-snug tracking-wide break-words">
             {displayText}
           </p>
         </div>
