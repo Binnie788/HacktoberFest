@@ -5,7 +5,11 @@ export type SlowLoopCallback = (advice: CoachingAdvice | null, errorReason?: str
 export class SlowLoopEngine {
   private isAnalyzing: boolean = false;
   private lastRequestTime: number = 0;
-  private minIntervalMs: number = 2800; // ~2.8s aligns with free tier 15 RPM
+  private minIntervalMs: number = import.meta.env.VITE_GEMMA_POLL_INTERVAL_MS 
+    ? parseInt(import.meta.env.VITE_GEMMA_POLL_INTERVAL_MS, 10) 
+    : 1500; // Default to 1.5s for live feedback (configurable via .env)
+  private requireStability: boolean = import.meta.env.VITE_REQUIRE_STABILITY === 'true';
+
   private lastSentMetrics: LocalMetrics | null = null;
   private offscreenCanvas: HTMLCanvasElement | null = null;
   private callback: SlowLoopCallback | null = null;
@@ -24,8 +28,8 @@ export class SlowLoopEngine {
   public shouldTrigger(metrics: LocalMetrics): boolean {
     const now = Date.now();
 
-    // 1. Must be held stable for >= 500ms
-    if (!metrics.isStable) return false;
+    // 1. Check stability (if configured to require it)
+    if (this.requireStability && !metrics.isStable) return false;
 
     // 2. Previous request must have finished
     if (this.isAnalyzing) return false;
@@ -33,14 +37,15 @@ export class SlowLoopEngine {
     // 3. Minimum cooldown interval
     if (now - this.lastRequestTime < this.minIntervalMs) return false;
 
-    // 4. Scene change check: if we already sent an analysis, ensure scene has changed noticeably
+    // 4. Scene change check
     if (this.lastSentMetrics) {
       const tiltDiff = Math.abs(metrics.tiltAngle - this.lastSentMetrics.tiltAngle);
       const brightnessDiff = Math.abs(metrics.brightness - this.lastSentMetrics.brightness);
-      const blurDiff = Math.abs(metrics.blurScore - this.lastSentMetrics.blurScore);
+      
+      const thresholdTilt = import.meta.env.VITE_SCENE_CHANGE_TILT ? parseFloat(import.meta.env.VITE_SCENE_CHANGE_TILT) : 0.8;
+      const thresholdBrightness = import.meta.env.VITE_SCENE_CHANGE_BRIGHTNESS ? parseInt(import.meta.env.VITE_SCENE_CHANGE_BRIGHTNESS, 10) : 15;
 
-      // Has the composition changed enough to warrant a fresh critique?
-      const changed = tiltDiff > 1.5 || brightnessDiff > 25 || blurDiff > 8.0;
+      const changed = tiltDiff > thresholdTilt || brightnessDiff > thresholdBrightness;
       if (!changed) return false;
     }
 
