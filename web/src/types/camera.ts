@@ -22,6 +22,7 @@ export interface LocalMetrics {
   frameDelta: number;
   faceDetected: boolean;
   faceBox?: BoundingBox;
+  motionWarning?: boolean;
 }
 
 export interface CoachingAdvice {
@@ -46,6 +47,7 @@ export interface CameraOverlayState {
   brightness: number; // 0 - 255
   blurScore: number;  // Sharpness metric
   isStable: boolean;  // Steady for >= 500ms
+  motionWarning?: boolean;
 
   // Subjects & Composition
   subjectBox: BoundingBox | null;

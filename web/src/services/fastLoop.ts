@@ -161,6 +161,8 @@ export class FastLoopEngine {
       };
     }
 
+    const motionWarning = data.frameDelta > 12.0 || tiltDelta > 4.5;
+
     this.latestMetrics = {
       blurScore: data.blurScore,
       brightness: data.brightness,
@@ -170,6 +172,7 @@ export class FastLoopEngine {
       frameDelta: data.frameDelta,
       faceDetected: Boolean(data.faceBox),
       faceBox: enrichedFaceBox,
+      motionWarning,
     };
 
     if (this.callback) {

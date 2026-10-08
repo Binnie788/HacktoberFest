@@ -77,6 +77,7 @@ export function App() {
       isStable: metrics.isStable,
       subjectBox: metrics.faceBox || null,
       gridPowerPointAligned: isPowerPoint,
+      motionWarning: metrics.motionWarning,
     }));
 
     // Feed to Slow Loop for Gemma 4 coaching evaluation
